@@ -84,11 +84,15 @@ Explanation:
 (1, A) and (3, C) were changed from 'm' to 'f'.
 (2, B) and (4, D) were changed from 'f' to 'm'.
 
+
+
 UPDATE Salary
 SET sex =
 CASE WHEN sex = 'm' THEN 'f'
 ELSE 'm'
 END;
+
+
 
 
 +-------------+---------+
@@ -121,6 +125,43 @@ Output:
 +----+------------------+
 Explanation: john@example.com is repeated two times. We keep the row with the smallest Id = 1.
 
+
+
 DELETE p1
 FROM Person as p1, Person as p2
 WHERE p1.id > p2.id AND p1.email = p2.email;
+
+
+
++----------------+---------+
+| Column Name    | Type    |
++----------------+---------+
+| user_id        | int     |
+| name           | varchar |
++----------------+---------+
+user_id is the primary key for this table.
+This table contains the ID and the name of the user. The name consists of only lowercase and uppercase characters.
+Write an SQL query to fix the names so that only the first character is uppercase and the rest are lowercase.
+Return the result table ordered by user_id.
+The query result format is in the following example.
+Example 1:
+Input: 
+Users table:
++---------+-------+
+| user_id | name  |
++---------+-------+
+| 1       | aLice |
+| 2       | bOB   |
++---------+-------+
+Output: 
++---------+-------+
+| user_id | name  |
++---------+-------+
+| 1       | Alice |
+| 2       | Bob   |
++---------+-------+
+
+SELECT Users.user_id , CONCAT(UPPER(SUBSTR(Users.name,1,1)),LOWER(SUBSTR(Users.name,2))) AS name 
+FROM Users
+ORDER BY
+Users.user_id ASC
