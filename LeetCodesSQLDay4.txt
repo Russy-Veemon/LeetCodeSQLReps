@@ -121,3 +121,5 @@ SELECT product_id, 'store3' AS store, store3 AS price
 FROM Products
 WHERE store3 IS NOT NULL
 ORDER BY product_id, store;
+
+SQL querry that rearranges the table to a more digestable format
