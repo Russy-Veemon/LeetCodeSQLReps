@@ -51,3 +51,13 @@ Employees 1, 2, 4, and 5 are working at this company.
 The name of employee 1 is missing.
 The salary of employee 2 is missing.
 
+SELECT employee_id
+FROM Salaries
+WHERE employee_id NOT IN (SELECT employee_id FROM Employees)
+UNION
+SELECT employee_id
+FROM Employees
+WHERE employee_id NOT IN (SELECT employee_id FROM Salaries)
+ORDER BY employee_id ASC;
+
+Using UNION function to do two different SELEC Querries to be able to get information from two tables without a JOIN
