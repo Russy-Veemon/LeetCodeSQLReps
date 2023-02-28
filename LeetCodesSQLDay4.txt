@@ -123,3 +123,165 @@ WHERE store3 IS NOT NULL
 ORDER BY product_id, store;
 
 SQL querry that rearranges the table to a more digestable format
+
+
++-------------+------+
+| Column Name | Type |
++-------------+------+
+| id          | int  |
+| p_id        | int  |
++-------------+------+
+id is the primary key column for this table.
+Each row of this table contains information about the id of a node and the id of its parent node in a tree.
+The given structure is always a valid tree.
+ 
+
+Each node in the tree can be one of three types:
+
+"Leaf": if the node is a leaf node.
+"Root": if the node is the root of the tree.
+"Inner": If the node is neither a leaf node nor a root node.
+Write an SQL query to report the type of each node in the tree.
+
+Return the result table in any order.
+
+The query result format is in the following example.
+
+ 
+
+Example 1:
+
+
+Input: 
+Tree table:
++----+------+
+| id | p_id |
++----+------+
+| 1  | null |
+| 2  | 1    |
+| 3  | 1    |
+| 4  | 2    |
+| 5  | 2    |
++----+------+
+Output: 
++----+-------+
+| id | type  |
++----+-------+
+| 1  | Root  |
+| 2  | Inner |
+| 3  | Leaf  |
+| 4  | Leaf  |
+| 5  | Leaf  |
++----+-------+
+Explanation: 
+Node 1 is the root node because its parent node is null and it has child nodes 2 and 3.
+Node 2 is an inner node because it has parent node 1 and child node 4 and 5.
+Nodes 3, 4, and 5 are leaf nodes because they have parent nodes and they do not have child nodes.
+Example 2:
+
+
+Input: 
+Tree table:
++----+------+
+| id | p_id |
++----+------+
+| 1  | null |
++----+------+
+Output: 
++----+-------+
+| id | type  |
++----+-------+
+| 1  | Root  |
++----+-------+
+Explanation: If there is only one node on the tree, you only need to output its root attributes.
+
+SELECT id, 'Root' AS type
+From Tree
+WHERE p_id IS NULL
+UNION
+SELECT id, 'Leaf' AS type
+From Tree
+WHERE p_id IS NOT NULL
+AND id NOT IN (
+    SELECT p_id
+    FROM Tree
+    WHERE p_id IS NOT NULL
+)
+UNION
+SELECT id, 'Inner' AS type
+FROM Tree
+WHERE id NOT IN(
+    SELECT id
+    FROM Tree
+    WHERE p_id IS NULL
+    UNION
+    SELECT id
+    FROM Tree
+    WHERE p_id IS NOT NULL
+    AND id NOT IN (
+    SELECT p_id
+    FROM Tree
+    WHERE p_id IS NOT NULL
+)
+)
+ORDER BY id;
+
+
+Table: Employee
+
++-------------+------+
+| Column Name | Type |
++-------------+------+
+| id          | int  |
+| salary      | int  |
++-------------+------+
+id is the primary key column for this table.
+Each row of this table contains information about the salary of an employee.
+ 
+
+Write an SQL query to report the second highest salary from the Employee table. If there is no second highest salary, the query should report null.
+
+The query result format is in the following example.
+
+ 
+
+Example 1:
+
+Input: 
+Employee table:
++----+--------+
+| id | salary |
++----+--------+
+| 1  | 100    |
+| 2  | 200    |
+| 3  | 300    |
++----+--------+
+Output: 
++---------------------+
+| SecondHighestSalary |
++---------------------+
+| 200                 |
++---------------------+
+Example 2:
+
+Input: 
+Employee table:
++----+--------+
+| id | salary |
++----+--------+
+| 1  | 100    |
++----+--------+
+Output: 
++---------------------+
+| SecondHighestSalary |
++---------------------+
+| null                |
++---------------------+
+
+
+SELECT MAX(salary) AS 'SecondHighestSalary'
+FROM Employee
+WHERE salary < (
+    SELECT MAX(salary)
+    FROM Employee
+)
